@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    padding: 0px;
+    margin: 0px;
+    font-family: "Inter", sans-serif;
+}
+
+body {
+  background-color: #f5f5f5;
+  font-weight: 200;
+}
+
+header {
+    /*display: flex;  Используем flexbox для выравнивания элементов */
+}
+
+header nav {
+    float: right;
+    width: 60%;
+}
+
+header nav ul {
+    margin-top: 30px;
+    margin-right: 20px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between; /*текст раскидан на всю ширину блока*/
+}
+
+header nav ul li {
+    display: inline-block;
+}
+
+header nav ul li a {
+    color: #343434;
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: 100;
+    transition: all 250ms ease;
+}
+
+header nav ul li:not(.uniform-button) a:hover {
+    border-bottom: 5px solid #ccadd9;
+    color: black;
+}
+
+header nav ul li.uniform-button a {
+    background-color: #ccadd9;
+    border-radius: 120px;
+    padding: 20px 20px;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 10px;
+    transition: all 500ms ease;
+}
+
+header nav ul li.uniform-button a:hover {
+    background-color: #f9897b;
+}
+
+#top-left-decor {
+  width: 30%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.main-paragraph {
+    padding-top: 19%;
+    text-align: center;
+    font-weight: 200;
+}
+
+.main-paragraph h2 {
+    font-size: 64px;
+    letter-spacing: 15px;
+    font-weight: 200;
+}
+
+.main-paragraph p{
+    font-size: 24;
+    padding-top: 20px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.pr-button {
+    border: none;
+    outline: none;
+    padding: 20px 20px;
+    border-radius: 120px;
+    font-size: 32px;
+    letter-spacing: 5px;
+    font-weight: 300;
+    background: linear-gradient(45deg, #ccadd9, #f9897b);
+    transition: all 500ms ease;
+    display: inline-block;
+}
+
+.pr-button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(80deg, #ccadd9, #f9897b);
+}
+
+.main-paragraph button {
+    margin-top: 30px;
+}
+
+/*Второй экран*/
+#right-decorator {
+  width: 45%;
+  position: absolute;
+  top: 75%;
+  right: 0;
+}
+
+.minor-paragraph {
+}
+
+#first-block .minor-paragraph {
+    margin-left: 5%;
+    margin-right: 25%;
+    position: absolute;
+    top: 130%;
+}
+
+.minor-paragraph h3 {
+    font-weight: 200;
+    letter-spacing: 7px;
+    font-size: 42px;
+}
+
+.minor-paragraph p {
+    font-size: 24px;
+    line-height: 1.5;
+}
+
+.minor-paragraph ul {
+  list-style-type: none; /* Убираем стандартные маркеры */
+  padding-left: 0; /* Убираем отступ слева */
+}
+
+.minor-paragraph ul li {
+  padding-left: 30px; /* Отступ для текста от изображения */
+}
+
+.minor-paragraph ul li:nth-child(1) {
+  background: url('./src/pdiamond.png') no-repeat left center;
+  background-size: 25px 25px;
+}
+
+.minor-paragraph ul li:nth-child(2) {
+  background: url('./src/rdiamond.png') no-repeat left center;
+  background-size: 25px 25px;
+}
+
+.minor-paragraph ul li:nth-child(3) {
+  background: url('./src/ydiamond.png') no-repeat left center;
+  background-size: 25px 25px;
+}
+
+.minor-paragraph ul li:nth-child(4) {
+  background: url('./src/gdiamond.png') no-repeat left center;
+  background-size: 25px 25px;
+}
+
+#left-decorator {
+  width: 45%;
+  position: absolute;
+  top: 185%;
+  left: 0;
+}
+
+#second-block .minor-paragraph {
+    margin-left: 45%;
+    margin-right: 5%;
+    position: absolute;
+    top: 240%;
+}
+
+#sqlight1-decorator {
+    position: absolute;
+    width: 30%;
+    top: 325%;
+    right: 0px;
+}
+
+#third-block .main-paragraph{
+    position: absolute;
+    top: 350%;
+}
+
+#third-block h2 {
+    font-size: 40px;
+}
+
+#third-block .pr-button {
+    font-size: 24px;
+}
