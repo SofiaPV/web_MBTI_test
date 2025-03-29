@@ -33,7 +33,7 @@ body {
 
 /* Стиль для самой формы */
 #auth-form {
-    width: 45%;
+    width: 50%;
     padding: 30px;
     display: flex;
     flex-direction: column; /* Размещаем элементы по вертикали */
@@ -143,6 +143,7 @@ form button {
 form input:focus {
     border: 2px solid  #f9897b; /* Цвет обводки при фокусе */
     outline: none; /* Убирает стандартное обрамление */
+    background-color: #ffffff;
  }
 
 #register-btn:hover {

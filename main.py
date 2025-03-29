@@ -1,5 +1,5 @@
 from Database import Database
-
+from back import Backend
 
 def main():
     db = Database('test.db')
@@ -42,4 +42,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    back = Backend()
+    back.run(debug=True, host='0.0.0.0')

@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
-    <link rel="stylesheet" href="register_page.css"> <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='register_page.css') }}">
 </head>
 <body>
-    <img src="./src/right_sq.png" id="decor">
+    <img src="{{ url_for('static', filename='src/right_sq.png') }}" id="decor">
     <div class="form-container">
         <form id="auth-form" action="/login" method="post">
-            <input type="text" id="username" placeholder="Логин:" required>
-            <input type="password" id="password" placeholder="Пароль:" required>
+            <input type="text" id="username" placeholder="Логин:" required autocomplete="off">
+            <input type="password" id="password" placeholder="Пароль:" required autocomplete="off">
             <div class="buttons">
                 <button type="submit" id="login-btn" onclick="setLoginAction(event)">Войти</button>
                 <button type="submit" id="register-btn" onclick="setRegisterAction(event)">Зарегистрироваться</button>
