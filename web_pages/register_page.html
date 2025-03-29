@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="register_page.css"> <!-- Подключаем CSS -->
+</head>
+<body>
+    <img src="./src/right_sq.png" id="decor">
+    <div class="form-container">
+        <form id="auth-form" action="/login" method="post">
+            <input type="text" id="username" placeholder="Логин:" required>
+            <input type="password" id="password" placeholder="Пароль:" required>
+            <div class="buttons">
+                <button type="submit" id="login-btn" onclick="setLoginAction(event)">Войти</button>
+                <button type="submit" id="register-btn" onclick="setRegisterAction(event)">Зарегистрироваться</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function setLoginAction(event) {
+            event.preventDefault();  // Отменяем отправку формы
+            document.getElementById('auth-form').action = '/login';  // Устанавливаем action на /login
+            document.getElementById('auth-form').submit();  // Отправляем форму
+        }
+
+        function setRegisterAction(event) {
+            event.preventDefault();  // Отменяем отправку формы
+            document.getElementById('auth-form').action = '/register';  // Устанавливаем action на /register
+            document.getElementById('auth-form').submit();  // Отправляем форму
+        }
+    </script>
+</body>
