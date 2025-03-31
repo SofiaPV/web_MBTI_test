@@ -25,7 +25,16 @@ class Backend:
 
         @self._app.route('/register')
         def register():
-            return render_template('register_page.html')
+            data = [
+                ('IFID', 10),
+                ('GDJK', 20),
+                ('JHGF', 10),
+                ('JKJD', 30)
+            ]
+            data = sorted(data, key=lambda x: x[1], reverse=True)
+            labels = [row[0] for row in data]
+            values = [row[1] for row in data]
+            return render_template('lk_screen.html', labels=labels, values=values, percentage=13)
 
     def run(self, *args, **kwargs):
         self._app.run(*args, **kwargs)
