@@ -17,6 +17,7 @@ body {
     height: 100vh;
     top: 0%;
     right: 0px;
+    z-index: -1;
 }
 
 /* Стилем для контейнера формы */

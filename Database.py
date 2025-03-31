@@ -64,11 +64,11 @@ class Database:
         try:
             self._cursor.execute("INSERT INTO Users (user_name, user_password) VALUES (?, ?)",
                                  (name, password))
+            self._conn.commit()
 
         except Exception as e:
             print(f'Приозошла ошибка: {e}')
             return False
-        self._conn.commit()
         return True
 
     def delete_user(self, name):
@@ -92,10 +92,11 @@ class Database:
                                  (user_id,))
             self._cursor.execute("DELETE FROM Users WHERE user_name = ?",
                                  (name,))
+            self._conn.commit()
+            
         except Exception as e:
             print(f'Произошла ошибка: {e}')
             return False
-        self._conn.commit()
         return True
 
     def write_test_answer(self, result, filename=None):
