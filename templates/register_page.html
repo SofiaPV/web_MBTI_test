@@ -13,22 +13,64 @@
             <input type="text" id="username" placeholder="Логин:" required autocomplete="off">
             <input type="password" id="password" placeholder="Пароль:" required autocomplete="off">
             <div class="buttons">
-                <button type="submit" id="login-btn" onclick="setLoginAction(event)">Войти</button>
-                <button type="submit" id="register-btn" onclick="setRegisterAction(event)">Зарегистрироваться</button>
+                <button type="button" id="login-btn" onclick="setLoginAction(event)">Войти</button>
+                <button type="button" id="register-btn" onclick="setRegisterAction(event)">Зарегистрироваться</button>
             </div>
         </form>
     </div>
     <script>
-        function setLoginAction(event) {
-            event.preventDefault();  // Отменяем отправку формы
-            document.getElementById('auth-form').action = '/login';  // Устанавливаем action на /login
-            document.getElementById('auth-form').submit();  // Отправляем форму
+        function setLoginAction() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const data = {
+                username: username,
+                password: password
+            };
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Устанавливаем тип контента как JSON
+                },
+                body: JSON.stringify(data)  // Преобразуем объект в JSON строку
+            })
+            .then(response => response.json())  // Обработка ответа сервера (если сервер отправляет JSON)
+            .then(data => {
+                console.log('Success:', data);
+                // Здесь можно обработать успешный ответ от сервера
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Обработка ошибки, например, вывод сообщения пользователю
+            });
         }
 
-        function setRegisterAction(event) {
-            event.preventDefault();  // Отменяем отправку формы
-            document.getElementById('auth-form').action = '/register';  // Устанавливаем action на /register
-            document.getElementById('auth-form').submit();  // Отправляем форму
+        function setRegisterAction() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const data = {
+                username: username,
+                password: password
+            };
+
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Устанавливаем тип контента как JSON
+                },
+                body: JSON.stringify(data)  // Преобразуем объект в JSON строку
+            })
+            .then(response => response.json())  // Обработка ответа сервера (если сервер отправляет JSON)
+            .then(data => {
+                console.log('Success:', data);
+                // Здесь можно обработать успешный ответ от сервера
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Обработка ошибки
+            });
         }
     </script>
 </body>
