@@ -18,6 +18,14 @@ class Backend:
         self._db = Database('test.db')
         self.add_routes()
 
+    def _calculate_result(self, answers):
+        """
+        calculates MBTI type
+        :param answers: user answers
+        :return: type (str) as 4 letters
+        """
+        return 'INFJ'
+
     def add_routes(self):
         @self._app.route('/')
         def home():
@@ -57,6 +65,20 @@ class Backend:
 
                 return jsonify({"OK": "ok!!!"})
 
+            return jsonify({"error": "Unknown request"}), 400
+
+        @self._app.route('/save', methods=['POST'])
+        def save():
+            if request.method == 'POST':
+                data = request.get_json()
+                answers = data.get('answers', None)
+                if answers is None:
+                    jsonify({"error": "No answers in JSON"}), 400
+                result = self._calculate_result(answers)
+                # self._db.write_test_answer(result, data)
+                # тут надо уточнить всякое
+
+                return jsonify({"OK": "ok!!!"})
             return jsonify({"error": "Unknown request"}), 400
 
     def run(self, *args, **kwargs):
