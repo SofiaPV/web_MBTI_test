@@ -99,19 +99,17 @@ class Database:
             return False
         return True
 
-    def write_test_answer(self, result, filename=None):
+    def write_test_answer(self, result, file=None):
         """
         writes MBTI type and answers on questions into tables
         :param result: str, MBTI type
-        :param filename: a .json file {"answers": [1, ..., i], "test_id": i, "datetime": 1,
+        :param file: a dict {"answers": [1, ..., i], "test_id": i, "datetime": 1,
                          "user_id": 1}. If None, only result will be written.
         :return: True if successful, False otherwise
         """
         datetime, user_id = 0, 0
-        if filename:
-            with open(filename, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                datetime, user_id = data['datetime'], data['user_id']
+        if file:
+            datetime, user_id = file['datetime'], file['user_id']
         try:
             self._cursor.execute("SELECT COUNT(*) FROM Users WHERE user_id = ?",
                                  (user_id,))
@@ -119,36 +117,34 @@ class Database:
                 print(f"No user {user_id} in Users")
                 return False
             self._cursor.execute("INSERT INTO Test_result (result, datetime, user_id) VALUES (?, ?, ?)",
-                                 (result, datetime, user_id if filename else 0))
+                                 (result, datetime, user_id if file else 0))
             self._conn.commit()
         except Exception as e:
             print(f'Неизвестная ошибка: {e}')
             return False
-        if filename:
-            self._write_answers(self._cursor.lastrowid, filename)
+        if file:
+            self._write_answers(self._cursor.lastrowid, file)
         return True
 
-    def _write_answers(self, result_id, filename):
+    def _write_answers(self, result_id, file):
         """
         writes answers into Answers table
         :param result_id: result_id of this test
-        :param filename: a .json file {"answers": [1, ..., i], "test_id": i, "datetime": 1,
+        :param file: a dict {"answers": [1, ..., i], "test_id": i, "datetime": 1,
                          "user_id": 1}
         :return: True if successful, False otherwise
         """
 
-        with open(filename, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            test_id = data['test_id']
-            try:
-                for num, ans in enumerate(data['answers']):
-                    self._cursor.execute("""
-                        INSERT INTO Answers (result_id, test_id, number, answer) 
-                        VALUES (?, ?, ?, ?)
-                    """, (result_id, test_id, num+1, ans))
-            except Exception as e:
-                print(f'Неизвестная ошибка: {e}')
-                return False
+        test_id = file['test_id']
+        try:
+            for num, ans in enumerate(file['answers']):
+                self._cursor.execute("""
+                    INSERT INTO Answers (result_id, test_id, number, answer) 
+                    VALUES (?, ?, ?, ?)
+                """, (result_id, test_id, num+1, ans))
+        except Exception as e:
+            print(f'Неизвестная ошибка: {e}')
+            return False
         self._conn.commit()
         return True
 
