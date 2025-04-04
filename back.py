@@ -1,6 +1,8 @@
 # back.py
 from flask import render_template, Flask, request, jsonify, redirect, url_for
 from Database import Database
+import plotly.graph_objects as go
+import plotly.io as pio
 
 
 class Backend:
@@ -41,16 +43,129 @@ class Backend:
         val = sum(answers[25:39])
         result[2] = 'T' if val < 0 else 'F'
         stats[2] = val
-        val = sum(answers[39:])
+        val = sum(answers[39:51])
         result[3] = 'J' if val < 0 else 'P'
         stats[3] = val
 
         return ''.join(result), stats
 
+    @staticmethod
+    def draw_result_statistics(stats):
+        print(f"stats: {stats}")
+        values = stats
+        labels = [['Интроверсия', 'Экстраверсия'], ['Разум', 'Интуиция'], ['Мышление', 'Чувства'], ['Планирование', 'Реагирование']]
+        labels_actual = [0, 0, 0, 0]
+        for i, el in enumerate(labels):
+            labels_actual[i] = el[0] if values[i] < 0 else el[1]
+
+        # Список фиксированных цветов для каждого столбца
+        bar_colors = ['#F9897B', '#FEDE95', '#D0E6A6', '#CCADD9']  # Цвета для каждого столбца
+
+        # Создание графика
+        fig = go.Figure()
+
+        # Добавление данных с фиксированными цветами для каждого столбца
+        fig.add_trace(go.Bar(
+            y=labels_actual,
+            x=values,
+            orientation='h',
+            marker=dict(
+                color=bar_colors,  # Используем фиксированные цвета
+                line=dict(color='black', width=2)  # Черная обводка для столбцов
+            ),
+            hoverinfo='none'  # Отключаем подсказки при наведении
+        ))
+
+        # Добавление аннотаций (подписей слева и справа)
+        annotations = []
+        for i, label_pair in enumerate(labels):
+            left_label, right_label = label_pair
+            # Добавляем черную обводку для левой метки
+            annotations.append(dict(
+                x=-30,  # Позиция для левой метки (можно настроить в зависимости от диапазона)
+                y=i,
+                text=left_label,
+                showarrow=False,
+                font=dict(size=12, color="black"),
+                align="right",
+            ))
+            annotations.append(dict(
+                x=-30,  # Позиция для левой метки (можно настроить в зависимости от диапазона)
+                y=i,
+                text=left_label,
+                showarrow=False,
+                font=dict(size=12, color=bar_colors[i]),
+                align="right"
+            ))
+            annotations.append(dict(
+                x=30,  # Позиция для правой метки
+                y=i,
+                text=right_label,
+                showarrow=False,
+                font=dict(size=12, color="black"),
+                align="left",
+            ))
+            annotations.append(dict(
+                x=30,  # Позиция для правой метки
+                y=i,
+                text=right_label,
+                showarrow=False,
+                font=dict(size=12, color=bar_colors[i]),
+                align="left"
+            ))
+
+        # Настройка графика
+        fig.update_layout(
+            showlegend=False,
+            annotations=annotations,
+            template="plotly_white",
+            paper_bgcolor='#f5f5f5',
+            plot_bgcolor='#f5f5f5',
+            bargap=0,
+            width = 600,  # Ширина графика
+            height = 200,  # Высота графика
+            xaxis_range=[-30, 30],  # Диапазон значений на оси X
+            yaxis=dict(
+                showticklabels=False,  # Отключаем стандартные подписи оси Y
+                showline=False,  # Убираем вертикальную линию на оси Y
+                autorange="reversed",  # Инвертируем порядок меток по оси Y
+            ),
+            xaxis=dict(
+                showticklabels=False,  # Отключаем горизонтальные метки на оси X
+                zeroline=False,  # Убираем вертикальную линию на оси X
+                showline=False  # Убираем горизонтальную линию по оси X
+            ),
+            shapes=[  # Добавляем вертикальную линию в нуле
+                {
+                    'type': 'line',
+                    'x0': 0,
+                    'x1': 0,
+                    'y0': -0.5,
+                    'y1': len(labels) - 0.5,  # Длина графика по оси Y
+                    'line': {
+                        'color': 'black',
+                        'width': 4,
+                        'dash': 'solid',
+                    }
+                }
+            ],
+            margin=dict(
+                l=45,  # Уменьшаем левый отступ
+                r=45,  # Уменьшаем правый отступ
+                t=0,  # Уменьшаем верхний отступ
+                b=0  # Уменьшаем нижний отступ
+            ),
+        )
+
+        config = {
+            'displayModeBar': False  # Отключить верхнюю панель с инструментами
+        }
+
+        return pio.to_html(fig, full_html=False, config=config)
+
     def add_routes(self):
         @self._app.route('/')
         def home():
-            return render_template('main_screen.html')
             return render_template('main_screen.html')
 
         @self._app.route('/register', methods=['POST', 'GET'])
@@ -109,7 +224,8 @@ class Backend:
             stats = list(map(int, stats.split(',')))
             print(f"result: {result}, stats: {stats}")
             print('READY TO RENDER')
-            return render_template('view_result.html', result=result)
+            graph = self.draw_result_statistics(stats)
+            return render_template('view_result.html', result=result, graph_html=graph)
 
 
         @self._app.route('/save', methods=['POST'])

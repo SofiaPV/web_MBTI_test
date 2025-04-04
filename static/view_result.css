@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    padding: 0px;
+    margin: 0px;
+    font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f5f5;
+  font-weight: 200;
+}
+
+header nav {
+    float: right;
+    width: 60%;
+}
+
+header nav ul {
+    margin-top: 30px;
+    margin-right: 20px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between; /*текст раскидан на всю ширину блока*/
+}
+
+header nav ul li {
+    display: inline-block;
+}
+
+header nav ul li a {
+    color: #343434;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 100;
+    transition: all 250ms ease;
+}
+
+header nav ul li:not(.uniform-button) a:hover {
+    border-bottom: 5px solid #ccadd9;
+    color: black;
+}
+
+header nav ul li.uniform-button a {
+    background-color: #ccadd9;
+    border-radius: 120px;
+    padding: 20px 20px;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 10px;
+    transition: all 500ms ease;
+}
+
+header nav ul li.uniform-button a:hover {
+    background-color: #f9897b;
+}
+
+#top-left-decor {
+  width: 20%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#result_div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+    height: 100vh; /* Высота экрана */
+    width: 100%; /* Ширина экрана */
+    position: absolute; /* Или фиксированное позиционирование */
+    top: 8%;
+    left: 0;
+}
+
+.text {
+    font-size: 30px;
+    font-weight: 100;
+    justify-content: center;
+    letter-spacing: 10px;
+}
+
+#result {
+    font-size: 60px;
+    font-weight: 600;
+    justify-content: center;
+    letter-spacing: 10px;
+    margin-top: 10px;
+    text-shadow:
+                1px 1px 0px black,   /* Обводка сверху справа */
+                -1px -1px 0px black, /* Обводка снизу слева */
+                1px -1px 0px black,  /* Обводка сверху слева */
+                -1px 1px 0px black;  /* Обводка снизу справа */
+}
+
+#chart {
+    margin-top: 10px;
+}
+
+/*Второй экран*/
+#right-decorator {
+  width: 45%;
+  position: absolute;
+  top: 75%;
+  right: 0;
+}
+
+#first-block .minor-paragraph {
+    margin-left: 5%;
+    margin-right: 33%;
+    position: absolute;
+    top: 110%;
+}
+
+.minor-paragraph p {
+    font-size: 18px;
+    line-height: 1.5;
+}
