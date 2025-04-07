@@ -118,6 +118,7 @@ class Backend:
         fig.update_layout(
             showlegend=False,
             annotations=annotations,
+            dragmode=False,
             template="plotly_white",
             paper_bgcolor='#f5f5f5',
             plot_bgcolor='#f5f5f5',
@@ -162,6 +163,137 @@ class Backend:
         }
 
         return pio.to_html(fig, full_html=False, config=config)
+    
+    @staticmethod
+    def draw_profile_bar_chart(all_user_results):
+        print(f"all_user_results: {all_user_results}")
+        labels2colors = {   
+                            'ENFJ': '#D58EAC',
+                            'ENFP': '#E395A3',
+                            'INFJ': '#FAB6B2',
+                            'INFP': '#FBD6D9',
+                            'ISFP': '#F9F2DC',
+                            'ESFP': '#FEF0B1',
+                            'ESTP': '#FEDE95',
+                            'ISTP': '#D0E6A6',
+                            'ENTJ': '#46C0C1',
+                            'ENTP': '#89D8E3',
+                            'INTJ': '#AED2E0',
+                            'INTP': '#96C3D8',
+                            'ISFJ': '#56A5BA',
+                            'ESFJ': '#3592A3',
+                            'ISTJ': '#B697C2',
+                            'ESTJ': '#B19CC5'
+                        }
+        
+        labels_actual = []
+        values = []
+        for i in range(min(3, len(all_user_results))):
+            labels_actual.append(all_user_results[i][0])
+            values.append(all_user_results[i][1])
+                
+        fig = go.Figure()
+
+        fig.add_trace(go.Bar(
+            y=labels_actual,
+            x=values,
+            orientation='h',
+            marker=dict(
+                color=[labels2colors[label] for label in labels_actual],
+            ),
+            hovertemplate='%{y}: %{x}<extra></extra>'
+        ))
+        fig.update_layout(
+            showlegend=False,
+            dragmode=False,
+            template="plotly_white",
+            paper_bgcolor='#f5f5f5',
+            plot_bgcolor='#f5f5f5',
+            bargap=0,
+            width = 500,  # Ширина графика
+            height = 300,  # Высота графика
+            xaxis_range=[0, max(values)],  # Диапазон значений на оси X
+            yaxis=dict(
+                showline=False,  # Убираем вертикальную линию на оси Y
+                autorange="reversed",  # Инвертируем порядок меток по оси Y
+            ),
+            xaxis=dict(
+                showticklabels=False,  # Отключаем горизонтальные метки на оси X
+                zeroline=False,  # Убираем вертикальную линию на оси X
+                showline=False  # Убираем горизонтальную линию по оси X
+            ),
+            shapes=[  # Добавляем вертикальную линию в нуле
+                {
+                    'type': 'line',
+                    'x0': 0,
+                    'x1': 0,
+                    'y0': -0.5,
+                    'y1': len(labels_actual) - 0.5,  # Длина графика по оси Y
+                    'line': {
+                        'color': 'black',
+                        'width': 4,
+                        'dash': 'solid',
+                    }
+                }
+            ],
+            margin=dict(
+                l=45,  # Уменьшаем левый отступ
+                r=45,  # Уменьшаем правый отступ
+                t=0,  # Уменьшаем верхний отступ
+                b=0  # Уменьшаем нижний отступ
+            ),
+        )
+
+        config = {
+            'displayModeBar': False  # Отключить верхнюю панель с инструментами
+        }
+
+        return pio.to_html(fig, full_html=False, config=config)
+
+    @staticmethod
+    def draw_profile_pie_chart(all_results):
+        labels = ['ENFJ', 'ENFP', 'INFJ', 'INFP', 'ISFP', 'ESFP', 'ESTP', 'ISTP', 'ENTJ', 'ENTP', 'INTJ', 'INTP', 'ISFJ', 'ESFJ', 'ISTJ', 'ESTJ']
+        colors = ['#D58EAC', '#E395A3', '#FAB6B2', '#FBD6D9',
+                '#F9F2DC', '#FEF0B1', '#FEDE95', '#D0E6A6',
+                '#46C0C1', '#89D8E3', '#AED2E0', '#96C3D8',
+                '#56A5BA', '#3592A3', '#B697C2', '#B19CC5']  # Заданные цвета
+        values = [all_results[label] for label in labels]
+
+        # Создаем объект Pie chart, который сохраняет оригинальный порядок
+        fig = go.Figure(go.Pie(
+            labels=labels, 
+            values=values, 
+            hole=0.7,
+            marker=dict(colors=colors),
+            textinfo='label',  # Показываем только метки
+            hoverinfo='label+percent',  # Показываем метку и процент на всплывающей подсказке
+            sort=False,
+        ))
+
+        # Настройка внешнего вида
+        fig.update_layout(
+            width=300,  # Увеличиваем ширину
+            height=300,  # Увеличиваем высоту
+            margin=dict(t=0, b=0, l=0, r=0),  # Уменьшаем отступы
+            showlegend=False,
+            template="plotly_white",
+            paper_bgcolor='#f5f5f5',
+            plot_bgcolor='#f5f5f5',
+            bargap=0
+        )
+
+        fig.update_traces(pull=[0, 0, 0., 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        config = {
+            'displayModeBar': False  # Отключить верхнюю панель с инструментами
+        }
+
+        return pio.to_html(fig, full_html=False, config=config)
+
+
+    
+    @staticmethod
+    def draw_profile_statistics(all_results, all_user_results):
+        return Backend.draw_profile_pie_chart(all_results), Backend.draw_profile_bar_chart(all_user_results)
 
     def add_routes(self):
         @self._app.route('/')
@@ -244,6 +376,31 @@ class Backend:
         @self._app.route('/test', methods=['GET'])
         def show_test():
             return render_template('test_page.html')
+        
+        @self._app.route('/profile', methods=['GET'])
+        def show_profile():
+            uid = 0 # TODO: get uid from session
+            #all_results = {item[0]: item[1] for item in self._db._get_statistics()}
+
+            #all_user_results = sorted(self._db._get_user_statistics(uid), key=lambda x: x[1], reverse=True)
+
+            # TODO: remove start
+            #print(all_results, all_user_results, last_user_result)
+            user_result = 'INFJ'
+            all_user_results = (('ENTP', 20), ('ENFJ', 10), ('ENFP', 3), ('ESTP', 2), ('INFJ', 1))
+            all_results = {'ENTP': 25, 'ENFJ': 60, 'INFJ': 10, 'INFP': 2, 'ISFP': 1, 'ENFP': 30, 'ESFP': 23, 'ESTP': 13, 'ISTP': 41, 'ENTJ': 14, 'INTJ': 26, 'INTP': 54, 'ISFJ': 31, 'ESFJ': 12, 'ISTJ': 42, 'ESTJ': 10}
+            # TODO: remove end
+
+            percentage = int(round(all_results[all_user_results[0][0]] / sum(all_results.values()) * 100))
+            pie_chart, bar_chart = self.draw_profile_statistics(all_results, all_user_results)
+
+            return render_template(
+                    'profile_page.html',
+                    percentage=percentage,
+                    user_result=user_result,
+                    pie_chart=pie_chart,
+                    bar_chart=bar_chart
+                )
 
 
     def run(self, *args, **kwargs):

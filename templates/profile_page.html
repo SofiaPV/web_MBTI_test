@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI Тест</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile_page.css') }}"> <!-- Подключаем CSS -->
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='src/top_lk.svg') }}" id="top-left-decor">
+        <nav>
+            <ul>
+                <li><a href="#" class="text-button">о тесте</a></li>
+                <li><a href="#" class="text-button">типы личности</a></li>
+                <li class="uniform-button">
+                    <a href="{{ url_for('register') }}">K</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="charts">
+        <div class="column">
+            <div class="text">
+                <p id="percentage">{{percentage}}%</p>
+                <span id="description">пользователей имеют<br>такой же тип личности!</span>
+            </div>
+            <div id="chart">
+                {{ pie_chart | safe }}
+            </div>
+        </div>
+        <div class="column">
+            <div class="text">
+                <span>Ваши самые частые результаты</span>
+            </div>
+            <div id="chart">
+                {{ bar_chart | safe }}
+            </div>
+        </div>
+    </div>
+    <div class="button">
+        <button id="delete-button">Удалить аккаунт</button>
+    </div>
+</body>
+</html>

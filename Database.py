@@ -151,3 +151,27 @@ class Database:
     def _view_all(self, name):
         self._cursor.execute(f"SELECT * FROM {name}")
         return self._cursor.fetchall()
+    
+    def _get_statistics(self):
+        """
+        gets statistics of all users
+        :return: statistics of all users
+        """
+        self._cursor.execute("""
+            SELECT result, COUNT(*) FROM Test_result 
+            GROUP BY result
+        """)
+        return self._cursor.fetchall()
+    
+    def _get_user_statistics(self, user_id):
+        """
+        gets statistics of user
+        :param user_id: unique user id
+        :return: statistics of user
+        """
+        self._cursor.execute("""
+            SELECT result, COUNT(*) FROM Test_result 
+            WHERE user_id = ?
+            GROUP BY result
+        """, (user_id,))
+        return self._cursor.fetchall()
