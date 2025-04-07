@@ -22,7 +22,7 @@
     <div class="main-paragraph">
         <h2>Понять себя и близких</h2>
         <p>поможет уникальный тест по методике MBTI, который не просто  определит ведущие черты вашей личности, но и поможет в выборе карьеры, укажет на ваши сильные и слабые стороны</p>
-        <button class="pr-button">ПРОЙТИ ТЕСТ</button>
+        <button class="pr-button" onclick="window.location.href='{{ url_for('show_test') }}'">ПРОЙТИ ТЕСТ</button>
     </div>
     <div id="first-block">
         <img src="{{ url_for('static', filename='src/right_rect.png') }}" id="right-decorator">
@@ -55,7 +55,7 @@
         <div class="main-paragraph">
             <h2>СТАНЬТЕ ЛУЧШЕЙ ВЕРСИЕЙ СЕБЯ </h2>
             <p>уже сегодня! Пройдите тест, чтобы узнать ваш тип личности, ваши сильные и слабые стороны, карьерные перспективы. Тест невероятно точно опишет ваши взгляды на жизнь, отношения и дружбу, а также подскажет, какие типы личности имеют схожие ценности</p>
-            <button class="pr-button">ПРОЙТИ ТЕСТ</button>
+            <button class="pr-button" onclick="window.location.href='{{ url_for('show_test') }}'">ПРОЙТИ ТЕСТ</button>
         </div>
     </div>
 </body>
