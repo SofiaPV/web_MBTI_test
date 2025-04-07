@@ -320,7 +320,8 @@ class Backend:
             if request.method == 'GET':
                 return render_template('register_page.html')
             if request.method == 'POST':
-                username, password = __handle_login_credentials()
+                data = request.get_json()
+                username, password = __handle_login_credentials(data)
                 hashed_pw = generate_password_hash(password)
                 self._db.add_user(username, hashed_pw)
 
@@ -332,7 +333,8 @@ class Backend:
         @self._app.route('/login', methods=['POST'])
         def login():
             if request.method == 'POST':
-                username, password = __handle_login_credentials()
+                data = request.get_json()
+                username, password = __handle_login_credentials(data)
                 user = self._db.get_user_by_username(username)
                 if user and check_password_hash(user.password_hash, password):
                     login_user(user)
@@ -340,9 +342,8 @@ class Backend:
                 return jsonify({"error": "Invalid credentials"}), 401
             return jsonify({"error": "Unknown request"}), 400
 
-        def __handle_login_credentials():
+        def __handle_login_credentials(data):
             # TODO!!! Make it safe!
-            data = request.get_json()
             print(data)
             if not data:
                 return jsonify({"error": "No JSON data provided"}), 400
