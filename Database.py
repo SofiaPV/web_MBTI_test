@@ -1,4 +1,5 @@
 import sqlite3, json
+from user import User
 
 
 class Database:
@@ -152,7 +153,7 @@ class Database:
         self._cursor.execute(f"SELECT * FROM {name}")
         return self._cursor.fetchall()
     
-    def _get_statistics(self):
+    def get_statistics(self):
         """
         gets statistics of all users
         :return: statistics of all users
@@ -163,7 +164,7 @@ class Database:
         """)
         return self._cursor.fetchall()
     
-    def _get_user_statistics(self, user_id):
+    def get_user_statistics(self, user_id):
         """
         gets statistics of user
         :param user_id: unique user id
@@ -175,3 +176,30 @@ class Database:
             GROUP BY result
         """, (user_id,))
         return self._cursor.fetchall()
+
+    def get_latest_result(self, uid):
+        pass
+
+    def get_user_by_username(self, username):
+        result = self._cursor.execute(
+            "SELECT id, username, password_hash FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+
+        if result:
+            return User(user_id=result[0],
+                        username=result[1],
+                        password_hash=result[2])
+        return None
+
+    def get_user_by_id(self, user_id):
+        result = self._cursor.execute(
+            "SELECT id, username, password_hash FROM users WHERE id = ?",
+            (user_id,)
+        ).fetchone()
+
+        if result:
+            return User(user_id=result[0],
+                        username=result[1],
+                        password_hash=result[2])
+        return None
