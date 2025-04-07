@@ -68,14 +68,14 @@ class Database:
             self._conn.commit()
 
         except Exception as e:
-            print(f'Приозошла ошибка: {e}')
+            print(f'Произошла ошибка: {e}')
             return False
         return True
 
     def delete_user(self, name):
         """
         deletes user by specific name
-        :param name: unique user name
+        :param name: unique username
         :return: True if successful, False otherwise
         """
         try:
