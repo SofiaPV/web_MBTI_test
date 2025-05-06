@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI Тест</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='info.css') }}"> <!-- Подключаем CSS -->
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='src/top.png') }}" id="top-left-decor">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('info') }}" class="text-button">о тесте</a></li>
+                <li><a href="{{ url_for('description') }}" class="text-button">типы личности</a></li>
+                <li class="uniform-button">
+                    <a href="{{ url_for('register') }}">Войти</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <section class="main-paragraph">
+      <p>
+        <strong>MBTI (Myers–Briggs Type Indicator)</strong> — это психологический типологический тест, разработанный на основе теории Карла Густава Юнга и адаптированный Изабель Бриггс Майерс и Кэтрин Бриггс. Цель теста — определить тип личности человека и его особенности в восприятии мира, принятии решений и взаимодействии с окружающими.
+      </p>
+
+      <p>Тест определяет личностный тип на основе четырёх шкал:</p>
+      <ul>
+        <li><strong>Экстраверсия (E)</strong> — <strong>Интроверсия (I)</strong></li>
+        <li><strong>Интуиция (N)</strong> — <strong>Ощущение (S)</strong></li>
+        <li><strong>Мышление (T)</strong> — <strong>Чувствование (F)</strong></li>
+        <li><strong>Суждение (J)</strong> — <strong>Восприятие (P)</strong></li>
+      </ul>
+      <p>
+        Комбинация этих характеристик формирует один из <strong>16 уникальных типов личности</strong>, каждый из которых имеет собственные особенности в поведении, коммуникации, обучении и профессиональных предпочтениях.
+      </p>
+      <p>
+        MBTI широко используется в профессиональной ориентации, командной работе, управлении персоналом и личностном развитии. Он не оценивает «хорошо» или «плохо», а помогает лучше понять свои сильные стороны и предпочтения, а также наладить более эффективное взаимодействие с другими людьми.
+      </p>
+    </section>
+
+</body>

@@ -245,6 +245,14 @@ class Backend:
         def show_test():
             return render_template('test_page.html')
 
+        @self._app.route('/info')
+        def info():
+            return render_template('info.html')
+
+        @self._app.route('/description')
+        def description():
+            return render_template('description.html')
+
 
     def run(self, *args, **kwargs):
         self._app.run(*args, **kwargs)
