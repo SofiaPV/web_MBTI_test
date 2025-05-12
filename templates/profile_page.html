@@ -44,4 +44,38 @@
         <button id="delete-button">Удалить аккаунт</button>
     </div>
 </body>
+<script>
+    // Функция для изменения цвета текста в зависимости от его значения
+    function changeTextColor(text) {
+        const textColors = {
+            'ENFJ': '#D58EAC',
+            'ENFP': '#E395A3',
+            'INFJ': '#FAB6B2',
+            'INFP': '#FBD6D9',
+            'ISFP': '#F9F2DC',
+            'ESFP': '#FEF0B1',
+            'ESTP': '#FEDE95',
+            'ISTP': '#D0E6A6',
+            'ENTJ': '#46C0C1',
+            'ENTP': '#89D8E3',
+            'INTJ': '#AED2E0',
+            'INTP': '#96C3D8',
+            'ISFJ': '#56A5BA',
+            'ESFJ': '#3592A3',
+            'ISTJ': '#B697C2',
+            'ESTJ': '#B19CC5'
+        };
+
+        // Получаем элемент с текстом
+        const textElement = document.getElementById('percentage');
+
+        // Если текст соответствует ключу, меняем его цвет
+        if (textColors[text]) {
+            textElement.style.color = textColors[text];
+        } else {
+            textElement.style.color = 'black';  // Цвет по умолчанию, если текст не найден
+        }
+    }
+    changeTextColor('{{user_result|safe}}');
+</script>
 </html>

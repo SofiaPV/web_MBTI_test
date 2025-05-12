@@ -274,7 +274,15 @@ class Backend:
                   '#F9F2DC', '#FEF0B1', '#FEDE95', '#D0E6A6',
                   '#46C0C1', '#89D8E3', '#AED2E0', '#96C3D8',
                   '#56A5BA', '#3592A3', '#B697C2', '#B19CC5']  # Заданные цвета
-        values = [all_results[label] for label in labels]
+        values = [all_results.get(label, 0) for label in labels]
+        i = 0
+        while i < len(values):
+            if values[i] == 0:
+                del values[i]
+                del labels[i]
+                del colors[i]
+            else:
+                i += 1
 
         # Создаем объект Pie chart, который сохраняет оригинальный порядок
         fig = go.Figure(go.Pie(

@@ -57,15 +57,16 @@ class Database:
         :param password: hashed password
         :return: True if successful, False otherwise
         """
-
-        self._cursor.execute("SELECT COUNT(*) FROM Users WHERE user_name = ?",
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM Users WHERE user_name = ?",
                              (name,))
-        if self._cursor.fetchone()[0] > 0:
+        if cursor.fetchone()[0] > 0:
             return False
         try:
-            self._cursor.execute("INSERT INTO Users (user_name, user_password) VALUES (?, ?)",
+            cursor.execute("INSERT INTO Users (user_name, user_password) VALUES (?, ?)",
                                  (name, password))
-            self._conn.commit()
+            conn.commit()
 
         except Exception as e:
             print(f'Произошла ошибка: {e}')
@@ -78,22 +79,24 @@ class Database:
         :param name: unique username
         :return: True if successful, False otherwise
         """
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
         try:
-            self._cursor.execute("SELECT user_id FROM Users WHERE user_name = ?",
+            cursor.execute("SELECT user_id FROM Users WHERE user_name = ?",
                                            (name,))
-            user_id = self._cursor.fetchone()
+            user_id = cursor.fetchone()
             if not user_id:
                 return False
             user_id = user_id[0]
-            self._cursor.execute("""
+            cursor.execute("""
                 DELETE FROM Answers 
                 WHERE result_id IN (SELECT result_id FROM Test_result WHERE user_id = ?)
             """, (user_id,))
-            self._cursor.execute("UPDATE Test_result SET user_id = 0 WHERE user_id = ?",
+            cursor.execute("UPDATE Test_result SET user_id = 0 WHERE user_id = ?",
                                  (user_id,))
-            self._cursor.execute("DELETE FROM Users WHERE user_name = ?",
+            cursor.execute("DELETE FROM Users WHERE user_name = ?",
                                  (name,))
-            self._conn.commit()
+            conn.commit()
             
         except Exception as e:
             print(f'Произошла ошибка: {e}')
@@ -108,23 +111,25 @@ class Database:
                          "user_id": 1}. If None, only result will be written.
         :return: True if successful, False otherwise
         """
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
         datetime, user_id = 0, 0
         if file:
             datetime, user_id = file['datetime'], file['user_id']
         try:
-            self._cursor.execute("SELECT COUNT(*) FROM Users WHERE user_id = ?",
+            cursor.execute("SELECT COUNT(*) FROM Users WHERE user_id = ?",
                                  (user_id,))
-            if self._cursor.fetchone()[0] == 0:
+            if cursor.fetchone()[0] == 0:
                 print(f"No user {user_id} in Users")
                 return False
-            self._cursor.execute("INSERT INTO Test_result (result, datetime, user_id) VALUES (?, ?, ?)",
+            cursor.execute("INSERT INTO Test_result (result, datetime, user_id) VALUES (?, ?, ?)",
                                  (result, datetime, user_id if file else 0))
-            self._conn.commit()
+            conn.commit()
         except Exception as e:
             print(f'Неизвестная ошибка: {e}')
             return False
         if file:
-            self._write_answers(self._cursor.lastrowid, file)
+            self._write_answers(cursor.lastrowid, file)
         return True
 
     def _write_answers(self, result_id, file):
@@ -137,32 +142,38 @@ class Database:
         """
 
         test_id = file['test_id']
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
         try:
             for num, ans in enumerate(file['answers']):
-                self._cursor.execute("""
+                cursor.execute("""
                     INSERT INTO Answers (result_id, test_id, number, answer) 
                     VALUES (?, ?, ?, ?)
                 """, (result_id, test_id, num+1, ans))
         except Exception as e:
             print(f'Неизвестная ошибка: {e}')
             return False
-        self._conn.commit()
+        conn.commit()
         return True
 
     def _view_all(self, name):
-        self._cursor.execute(f"SELECT * FROM {name}")
-        return self._cursor.fetchall()
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM {name}")
+        return cursor.fetchall()
     
     def get_statistics(self):
         """
         gets statistics of all users
         :return: statistics of all users
         """
-        self._cursor.execute("""
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
+        cursor.execute("""
             SELECT result, COUNT(*) FROM Test_result 
             GROUP BY result
         """)
-        return self._cursor.fetchall()
+        return cursor.fetchall()
     
     def get_user_statistics(self, user_id):
         """
@@ -170,19 +181,23 @@ class Database:
         :param user_id: unique user id
         :return: statistics of user
         """
-        self._cursor.execute("""
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
+        cursor.execute("""
             SELECT result, COUNT(*) FROM Test_result 
             WHERE user_id = ?
             GROUP BY result
         """, (user_id,))
-        return self._cursor.fetchall()
+        return cursor.fetchall()
 
     def get_latest_result(self, uid):
         pass
 
     def get_user_by_username(self, username):
-        result = self._cursor.execute(
-            "SELECT id, username, password_hash FROM users WHERE username = ?",
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
+        result = cursor.execute(
+            "SELECT user_id, user_name, user_password FROM users WHERE user_name = ?",
             (username,)
         ).fetchone()
 
@@ -193,8 +208,10 @@ class Database:
         return None
 
     def get_user_by_id(self, user_id):
-        result = self._cursor.execute(
-            "SELECT id, username, password_hash FROM users WHERE id = ?",
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
+        result = cursor.execute(
+            "SELECT user_id, user_name, user_password FROM users WHERE user_id = ?",
             (user_id,)
         ).fetchone()
 
