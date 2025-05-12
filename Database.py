@@ -191,7 +191,13 @@ class Database:
         return cursor.fetchall()
 
     def get_latest_result(self, uid):
-        pass
+        conn = sqlite3.connect(self._db_name)
+        cursor = conn.cursor()
+        result = cursor.execute(
+            "SELECT result FROM Test_result WHERE user_id = ? ORDER BY datetime DESC LIMIT 1",
+            (uid,)
+        ).fetchone()
+        return result[0] if result else None
 
     def get_user_by_username(self, username):
         conn = sqlite3.connect(self._db_name)

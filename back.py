@@ -315,6 +315,38 @@ class Backend:
         return pio.to_html(fig, full_html=False, config=config)
 
     @staticmethod
+    def draw_void(all_results):
+        fig = go.Figure()
+        fig.update_layout(
+            width=300,  # Увеличиваем ширину
+            height=300,  # Увеличиваем высоту
+            margin=dict(t=0, b=0, l=0, r=0),  # Уменьшаем отступы
+            showlegend=False,
+            template="plotly_white",
+            paper_bgcolor='#f5f5f5',
+            plot_bgcolor='#f5f5f5',
+            bargap=0,
+            xaxis=dict(
+                showgrid=False,  # Отключить горизонтальную сетку
+                zeroline=False,  # Убрать линию нуля
+                showline=False,   # Убрать ось X
+                showticklabels=False,  # Убрать подписи к меткам оси X
+                title=None  # Убрать заголовок оси X
+            ),
+            yaxis=dict(
+                showgrid=False,  # Отключить вертикальную сетку
+                zeroline=False,  # Убрать линию нуля
+                showline=False,   # Убрать ось Y
+                showticklabels=False,  # Убрать подписи к меткам оси Y
+                title=None  # Убрать заголовок оси Y
+            )
+        )
+        config = {
+            'displayModeBar': False  # Отключить верхнюю панель с инструментами
+        }
+        return Backend.draw_profile_pie_chart(all_results), pio.to_html(fig, full_html=False, config=config)
+
+    @staticmethod
     def draw_profile_statistics(all_results, all_user_results):
         return Backend.draw_profile_pie_chart(all_results), Backend.draw_profile_bar_chart(all_user_results)
 
@@ -416,9 +448,15 @@ class Backend:
             all_user_results = sorted(self._db.get_user_statistics(uid), key=lambda x: x[1], reverse=True)
             user_result = self._db.get_latest_result(uid)
 
-            percentage = int(round(all_results[all_user_results[0][0]] / sum(all_results.values()) * 100))
-            pie_chart, bar_chart = self.draw_profile_statistics(all_results, all_user_results)
-
+            if len(all_user_results) > 0 and len(all_user_results[0]) > 0:
+                percentage = int(round(all_results[all_user_results[0][0]] / sum(all_results.values()) * 100))
+            else:
+                percentage = 0
+            if user_result is None:
+                user_result = 'ENFJ'
+                pie_chart, bar_chart = self.draw_void(all_results)
+            else:
+                pie_chart, bar_chart = self.draw_profile_statistics(all_results, all_user_results)
             return render_template(
                 'profile_page.html',
                 percentage=percentage,
