@@ -5,6 +5,7 @@ from Database import Database
 import plotly.graph_objects as go
 import plotly.io as pio
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+import time
 
 
 class Backend:
@@ -408,6 +409,7 @@ class Backend:
             if answers is None:
                 return jsonify({"error": "No answers in JSON"}), 400
             result, stats = self._calculate_result(answers)
+            self._db.write_test_answer(result, {'answers': answers, 'user_id': current_user.id, 'test_id': 1, 'datetime': time.time()})
             print('READY TO REDIRECT')
             print(f"result: {result}, stats: {stats}")
             return redirect(url_for('show_result', result=result, stats=','.join(map(str, stats))))
