@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI Тест</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile_page.css') }}"> <!-- Подключаем CSS -->
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='src/top_lk.svg') }}" id="top-left-decor">
+        <nav>
+            <ul>
+                <li><a href="#" class="text-button">о тесте</a></li>
+                <li><a href="#" class="text-button">типы личности</a></li>
+                <li class="uniform-button">
+                    <a href="{{ url_for('register') }}">K</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="charts">
+        <div class="column">
+            <div class="text">
+                <p id="percentage">{{percentage}}%</p>
+                <span id="description">пользователей имеют<br>такой же тип личности!</span>
+            </div>
+            <div id="chart">
+                {{ pie_chart | safe }}
+            </div>
+        </div>
+        <div class="column">
+            <div class="text">
+                <span>Ваши самые частые результаты</span>
+            </div>
+            <div id="chart">
+                {{ bar_chart | safe }}
+            </div>
+        </div>
+    </div>
+    <div class="button">
+        <button id="delete-button">Удалить аккаунт</button>
+    </div>
+</body>
+<script>
+    // Функция для изменения цвета текста в зависимости от его значения
+    function changeTextColor(text) {
+        const textColors = {
+            'ENFJ': '#D58EAC',
+            'ENFP': '#E395A3',
+            'INFJ': '#FAB6B2',
+            'INFP': '#FBD6D9',
+            'ISFP': '#F9F2DC',
+            'ESFP': '#FEF0B1',
+            'ESTP': '#FEDE95',
+            'ISTP': '#D0E6A6',
+            'ENTJ': '#46C0C1',
+            'ENTP': '#89D8E3',
+            'INTJ': '#AED2E0',
+            'INTP': '#96C3D8',
+            'ISFJ': '#56A5BA',
+            'ESFJ': '#3592A3',
+            'ISTJ': '#B697C2',
+            'ESTJ': '#B19CC5'
+        };
+
+        // Получаем элемент с текстом
+        const textElement = document.getElementById('percentage');
+
+        // Если текст соответствует ключу, меняем его цвет
+        if (textColors[text]) {
+            textElement.style.color = textColors[text];
+        } else {
+            textElement.style.color = 'black';  // Цвет по умолчанию, если текст не найден
+        }
+    }
+    changeTextColor('{{user_result|safe}}');
+</script>
+</html>
