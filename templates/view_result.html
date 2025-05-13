@@ -14,8 +14,12 @@
                 <li><a href="{{ url_for('info') }}" class="text-button">о тесте</a></li>
                 <li><a href="{{ url_for('description') }}" class="text-button">типы личности</a></li>
                 <li class="uniform-button">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('show_profile') }}">Профиль</a>
+                {% else %}
                     <a href="{{ url_for('register') }}">Войти</a>
-                </li>
+                {% endif %}
+            </li>
             </ul>
         </nav>
     </header>

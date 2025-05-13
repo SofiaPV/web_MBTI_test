@@ -9,7 +9,7 @@
 <body>
     <img src="{{ url_for('static', filename='src/right_sq.png') }}" id="decor">
     <div class="form-container">
-        <form id="auth-form" action="/login" method="post">
+        <form id="auth-form">
             <input type="text" id="username" placeholder="Логин:" required autocomplete="off">
             <input type="password" id="password" placeholder="Пароль:" required autocomplete="off">
             <div class="buttons">
@@ -17,60 +17,67 @@
                 <button type="button" id="register-btn" onclick="setRegisterAction(event)">Зарегистрироваться</button>
             </div>
         </form>
+        <div id="error-message" style="color: red; display: none;"></div>
     </div>
     <script>
-        function setLoginAction() {
+        function handleResponse(data) {
+            const errorElement = document.getElementById('error-message');
+
+            if(data.redirect) {
+                // Выполняем редирект
+                window.location.href = data.redirect;
+            }
+            else if(data.error) {
+                // Показываем ошибку
+                errorElement.textContent = data.error;
+                errorElement.style.display = 'block';
+                setTimeout(() => {
+                    errorElement.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function setLoginAction(event) {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-
-            const data = {
-                username: username,
-                password: password
-            };
 
             fetch('/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'  // Устанавливаем тип контента как JSON
-                },
-                body: JSON.stringify(data)  // Преобразуем объект в JSON строку
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
             })
-            .then(response => response.json())  // Обработка ответа сервера (если сервер отправляет JSON)
-            .then(data => {
-                console.log('Success:', data);
-                // Здесь можно обработать успешный ответ от сервера
+            .then(response => {
+                if(response.status === 401) {
+                    return response.json().then(data => ({error: data.error}));
+                }
+                return response.json();
             })
+            .then(handleResponse)
             .catch(error => {
                 console.error('Error:', error);
-                // Обработка ошибки, например, вывод сообщения пользователю
             });
         }
 
-        function setRegisterAction() {
+        function setRegisterAction(event) {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const data = {
-                username: username,
-                password: password
-            };
-
             fetch('/register', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'  // Устанавливаем тип контента как JSON
-                },
-                body: JSON.stringify(data)  // Преобразуем объект в JSON строку
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
             })
-            .then(response => response.json())  // Обработка ответа сервера (если сервер отправляет JSON)
-            .then(data => {
-                console.log('Success:', data);
-                // Здесь можно обработать успешный ответ от сервера
+            .then(response => {
+                if(response.status >= 400) {
+                    return response.json().then(data => ({error: data.error}));
+                }
+                return response.json();
             })
+            .then(handleResponse)
             .catch(error => {
                 console.error('Error:', error);
-                // Обработка ошибки
             });
         }
     </script>
 </body>
+</html>

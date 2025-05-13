@@ -369,7 +369,7 @@ class Backend:
                 user = self._db.get_user_by_username(username)
                 login_user(user)
 
-                return jsonify({"OK": "Registration successful"})
+                return jsonify({"redirect": url_for('home')}), 200
 
         @self._app.route('/login', methods=['POST'])
         def login():
@@ -379,7 +379,7 @@ class Backend:
                 user = self._db.get_user_by_username(username)
                 if user and check_password_hash(user.password_hash, password):
                     login_user(user)
-                    return jsonify({"OK": "Login successful"})
+                    return jsonify({"redirect": url_for('home')}), 200
                 return jsonify({"error": "Invalid credentials"}), 401
             return jsonify({"error": "Unknown request"}), 400
 
@@ -399,7 +399,7 @@ class Backend:
         @login_required
         def logout():
             logout_user()
-            return jsonify({"OK": "Logged out"})
+            return redirect(url_for('home'))
 
         @self._app.route('/result', methods=['POST'])
         def get_result():
