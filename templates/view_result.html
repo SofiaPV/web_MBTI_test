@@ -8,7 +8,9 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='src/top.png') }}" id="top-left-decor">
+        <a href="{{url_for('home')}}">
+            <img src="{{ url_for('static', filename='src/top.png') }}" id="top-left-decor">
+        </a>
         <nav>
             <ul>
                 <li><a href="{{ url_for('info') }}" class="text-button">о тесте</a></li>
@@ -41,22 +43,22 @@
     // Функция для изменения цвета текста в зависимости от его значения
     function changeTextColor(text) {
         const textColors = {
-            'INTJ': '#CCADD9',
-            'INTP': '#CCADD9',
-            'ENTJ': '#CCADD9',
-            'ENTP': '#CCADD9',
-            'INFJ': '#D0E6A6',
-            'INFP': '#D0E6A6',
-            'ENFJ': '#D0E6A6',
-            'ENFP': '#D0E6A6',
-            'ISTJ': '#FEDE95',
-            'ISFJ': '#FEDE95',
-            'ESTJ': '#FEDE95',
-            'ESFJ': '#FEDE95',
-            'ISTP': '#F9897B',
-            'ISFP': '#F9897B',
-            'ESTP': '#F9897B',
-            'ESFP': '#F9897B'
+            'ENFJ': '#D58EAC',
+            'ENFP': '#E395A3',
+            'INFJ': '#FAB6B2',
+            'INFP': '#FBD6D9',
+            'ISFP': '#F9F2DC',
+            'ESFP': '#FEF0B1',
+            'ESTP': '#FEDE95',
+            'ISTP': '#D0E6A6',
+            'ENTJ': '#46C0C1',
+            'ENTP': '#89D8E3',
+            'INTJ': '#AED2E0',
+            'INTP': '#96C3D8',
+            'ISFJ': '#56A5BA',
+            'ESFJ': '#3592A3',
+            'ISTJ': '#B697C2',
+            'ESTJ': '#B19CC5'
         };
 
         // Получаем элемент с текстом
