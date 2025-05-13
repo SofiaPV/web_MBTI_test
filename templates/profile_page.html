@@ -9,7 +9,9 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='src/top_lk.svg') }}" id="top-left-decor">
+        <a href="{{url_for('home')}}">
+            <img src="{{ url_for('static', filename='src/top_lk.svg') }}" id="top-left-decor">
+        </a>
         <nav>
             <ul>
                 <li><a href="{{ url_for('info') }}" class="text-button">о тесте</a></li>
