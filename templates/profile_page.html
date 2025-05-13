@@ -12,8 +12,8 @@
         <img src="{{ url_for('static', filename='src/top_lk.svg') }}" id="top-left-decor">
         <nav>
             <ul>
-                <li><a href="#" class="text-button">о тесте</a></li>
-                <li><a href="#" class="text-button">типы личности</a></li>
+                <li><a href="{{ url_for('info') }}" class="text-button">о тесте</a></li>
+                <li><a href="{{ url_for('description') }}" class="text-button">типы личности</a></li>
                 <li class="uniform-button">
                     <a href="{{ url_for('register') }}">K</a>
                 </li>
