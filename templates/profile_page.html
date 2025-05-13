@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="button">
-        <button id="delete-button">Удалить аккаунт</button>
+        <button id="delete-button" onclick="setDeleteAction(event)">Удалить аккаунт</button>
     </div>
 </body>
 <script>
@@ -78,6 +78,40 @@
             textElement.style.color = 'black';  // Цвет по умолчанию, если текст не найден
         }
     }
+    function handleResponse(data) {
+        const errorElement = document.getElementById('error-message');
+
+        if(data.redirect) {
+            // Выполняем редирект
+            window.location.href = data.redirect;
+        }
+        else if(data.error) {
+            // Показываем ошибку
+            errorElement.textContent = data.error;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 3000);
+        }
+    }
+    
+    function setDeleteAction(event) {
+            fetch('/delete', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({})
+            })
+            .then(response => {
+                if(response.status === 401) {
+                    return response.json().then(data => ({error: data.error}));
+                }
+                return response.json();
+            })
+            .then(handleResponse)
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     changeTextColor('{{user_result|safe}}');
 </script>
 </html>

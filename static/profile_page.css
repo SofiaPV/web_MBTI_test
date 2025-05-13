@@ -131,8 +131,20 @@ form button {
 
 #delete-button {
     position: relative;
+    display: flex;
+    align-items: center;      /* Вертикальное центрирование */
+    justify-content: center; 
     background: linear-gradient(45deg, #fede95, #f9897b);
     z-index: 1;
+    outline: none;
+    border: none; /* Убираем стандартную рамку кнопки */
+    padding: 15px 30px; /* Добавляем внутренние отступы */
+    border-radius: 60px; /* Скругляем углы */
+    font-size: 16px; /* Размер текста */
+    color: black; /* Цвет текста */
+    cursor: pointer; /* Указываем, что это кнопка */
+    transition: all 0.3s ease; /* Плавный переход для эффектов */
+    font: 25px "Inter", sans-serif;
 }
 
 #delete-button::before, #delete-button::after {

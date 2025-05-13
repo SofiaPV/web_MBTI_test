@@ -73,29 +73,23 @@ class Database:
             return False
         return True
 
-    def delete_user(self, name):
+    def delete_user(self, user_id):
         """
         deletes user by specific name
-        :param name: unique username
+        :param user_id: unique id
         :return: True if successful, False otherwise
         """
         conn = sqlite3.connect(self._db_name)
         cursor = conn.cursor()
         try:
-            cursor.execute("SELECT user_id FROM Users WHERE user_name = ?",
-                                           (name,))
-            user_id = cursor.fetchone()
-            if not user_id:
-                return False
-            user_id = user_id[0]
             cursor.execute("""
                 DELETE FROM Answers 
                 WHERE result_id IN (SELECT result_id FROM Test_result WHERE user_id = ?)
             """, (user_id,))
             cursor.execute("UPDATE Test_result SET user_id = 0 WHERE user_id = ?",
                                  (user_id,))
-            cursor.execute("DELETE FROM Users WHERE user_name = ?",
-                                 (name,))
+            cursor.execute("DELETE FROM Users WHERE user_id = ?",
+                                 (user_id,))
             conn.commit()
             
         except Exception as e:

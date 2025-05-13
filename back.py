@@ -400,6 +400,13 @@ class Backend:
         def logout():
             logout_user()
             return redirect(url_for('home'))
+        
+        @self._app.route('/delete', methods=['POST'])
+        @login_required
+        def delete():
+            self._db.delete_user(current_user.id)
+            logout_user()
+            return jsonify({"redirect": url_for('home')}), 200
 
         @self._app.route('/result', methods=['POST'])
         def get_result():
@@ -409,7 +416,10 @@ class Backend:
             if answers is None:
                 return jsonify({"error": "No answers in JSON"}), 400
             result, stats = self._calculate_result(answers)
-            self._db.write_test_answer(result, {'answers': answers, 'user_id': current_user.id, 'test_id': 1, 'datetime': time.time()})
+            if hasattr(current_user, 'id'):
+                self._db.write_test_answer(result, {'answers': answers, 'user_id': current_user.id, 'test_id': 1, 'datetime': time.time()})
+            else:
+                self._db.write_test_answer(result)
             print('READY TO REDIRECT')
             print(f"result: {result}, stats: {stats}")
             return redirect(url_for('show_result', result=result, stats=','.join(map(str, stats))))
